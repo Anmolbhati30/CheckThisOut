@@ -21,6 +21,17 @@ h3 {
 
 }
 
+
+.fruit-btn{
+    background-color:#da63df;
+    border:none;
+    border-radius:12px;
+    padding:0.7rem 1rem;
+    margin:0.5rem;
+    color:white;
+    display:inline-block;
+}
+
 .left {
     float: left;
     width: 60%;
