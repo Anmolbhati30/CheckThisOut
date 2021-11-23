@@ -20,11 +20,9 @@
         <div class="right">
             <div class="item-amount" id="shopping-cart">
                 <i class="fa fa-shopping-cart" style="font-size:24px"> </i>
-                <span></span><span class="delete">delete all </span>
+                <span></span><span class="delete" onclick="deleteAll()" >delete all </span>
             </div>
-            <div class="item-list" id="item-list">
-
-            </div>
+            <div class="item-list" id="item-list"></div>
             <div class="total">
                 <span>TOTAL</span><span class="total-price">£4.00 </span>
             </div>
@@ -226,7 +224,7 @@
 
 
         basketClasses = Object.keys(basket);
-        basketCounter = 1;
+        basketCounter = 0;
         totalItemCount = 0;
         basketClasses.forEach((key, index) => {
 
@@ -266,5 +264,15 @@
 
 
     // }
+    function deleteAll(){
+        basket = {};
+        parent = document.getElementById("item-list") 
+        while(parent.firstChild){
+            parent.removeChild(parent.firstChild);
+        }
+
+        document.getElementById("shopping-cart").childNodes[1].innerHTML = "";
+    }
+
     init()
 </script>
