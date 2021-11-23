@@ -233,14 +233,19 @@
         }
 
 
-        basketClasses = Object.keys(basket);
-        basketCounter = 0;
-        totalItemCount = 0;
+        let basketClasses = Object.keys(basket);
+        let basketCounter = 0;
+        let totalItemCount = 0;
+        let basketNode = document.getElementById("item-list");
         basketClasses.forEach((key, index) => {
 
-
-            document.getElementById("item-list").appendChild(document.createElement("p"));
-            document.getElementById("item-list").childNodes[basketCounter].innerHTML = key + ": " + basket[key];
+            basketNode.appendChild(document.createElement("div"));
+            basketItem = basketNode.childNodes[basketCounter];
+            basketItem.appendChild(document.createElement("p"));
+            basketItem.childNodes[0].innerHTML = key + ": " + basket[key];
+            basketItem.appendChild(document.createElement("i"));
+            basketItem.childNodes[1].setAttribute("class","fa fa-minus-circle decrement");
+            basketItem.childNodes[1].setAttribute("onclick",`decrement("${key}")`)
             totalItemCount += basket[key];
 
 
@@ -278,11 +283,44 @@
     function deleteAll(){
         basket = {};
         parent = document.getElementById("item-list") 
-        while(parent.firstChild){
-            parent.removeChild(parent.firstChild);
-        }
+        parent.innerHTML = "";
+        // while(parent.firstChild){
+        //     parent.removeChild(parent.firstChild);
+        // }
 
         document.getElementById("shopping-cart").childNodes[1].innerHTML = "";
+    }
+
+    function decrement(key){
+        if(basket[key] <= 1){
+            delete basket[key];
+        }else{
+            basket[key]--;
+        }
+
+        let basketClasses = Object.keys(basket);
+        let basketCounter = 0;
+        let totalItemCount = 0;
+        let basketNode = document.getElementById("item-list");
+        basketNode.innerHTML = "";
+        
+        basketClasses.forEach((key, index) => {
+
+
+            basketNode.appendChild(document.createElement("div"));
+            basketItem = basketNode.childNodes[basketCounter];
+            basketItem.appendChild(document.createElement("p"));
+            basketItem.childNodes[0].innerHTML = key + ": " + basket[key];
+            basketItem.appendChild(document.createElement("i"));
+            basketItem.childNodes[1].setAttribute("class","fa fa-minus-circle decrement");
+            basketItem.childNodes[1].setAttribute("onclick",`decrement("${key}")`)
+            totalItemCount += basket[key];
+            
+            basketCounter++;
+        });
+        document.getElementById("shopping-cart").childNodes[1].innerHTML = "  " + totalItemCount + " items";
+        console.log(Object.keys(basket).length);
+
     }
 
     init()

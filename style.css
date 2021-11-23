@@ -21,6 +21,10 @@ h3 {
 
 }
 
+p{
+    display: inline-block;
+}
+
 
 .fruit-btn{
     background-color:#da63df;
@@ -150,6 +154,14 @@ h3 {
     float: right; 
     font-size: 20px; 
     font-weight: bolder;
+}
+
+.decrement{
+    float: right; 
+    font-size: 20px; 
+    font-weight: bolder;
+    margin:22px auto;
+    
 }
 
 .prediction {
