@@ -20,7 +20,7 @@
         <div class="right">
             <div class="item-amount" id="shopping-cart">
                 <i class="fa fa-shopping-cart" style="font-size:24px"> </i>
-                <span></span><span class="delete" onclick="deleteAll()" >delete all </span>
+                <span></span><span class="delete" onclick="deleteAll()" >delete all</span>
             </div>
             <div class="item-list" id="item-list"></div>
             <div class="total">
@@ -118,11 +118,11 @@
             //     labelContainer.childNodes[index].innerHTML = `<button onclick=addToBasket(${prediction})>`+prediction+"</button>";
             // });
 
-            labelContainer.childNodes[0].innerHTML = `<button onclick=addToBasket("${two_most_frequent[0]}")>` + two_most_frequent[0] + "</button>";
+            labelContainer.childNodes[0].innerHTML = `<button onclick='addToBasket("${two_most_frequent[0]}")'>` + two_most_frequent[0] + "</button>";
             // console.log(two_most_frequent[1]);
             if (two_most_frequent[1]) {
                 // labelContainer.childNodes[1].disabled = false;  
-                labelContainer.childNodes[1].innerHTML = `<button onclick=addToBasket("${two_most_frequent[1]}")>` + two_most_frequent[1] + "</button>";
+                labelContainer.childNodes[1].innerHTML = `<button onclick='addToBasket("${two_most_frequent[1]}")'>` + two_most_frequent[1] + "</button>";
             } else {
                 labelContainer.childNodes[1].innerHTML = "";
                 // labelContainer.childNodes[1].disabled = true; 
