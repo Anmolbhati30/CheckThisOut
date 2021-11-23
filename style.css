@@ -29,7 +29,6 @@ p{
 .fruit-btn{
     background-color:#da63df;
     border:none;
-    border-radius:12px;
     padding:0.7rem 1rem;
     margin:0.5rem;
     color:white;
@@ -84,6 +83,7 @@ p{
     width: 430px; 
     margin:1% 2% 1% 2%;
     text-align: left;
+    font-family: 'Raleway';font-size: 22px;
 }
 
 .item-list{
@@ -175,4 +175,9 @@ p{
 
 .shopping-cart {
     text-align: left;
+
+}
+
+#total-count{
+    font-family: 'Raleway';font-size: 22px;
 }
