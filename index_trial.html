@@ -20,11 +20,9 @@
         <div class="right">
             <div class="item-amount" id="shopping-cart">
                 <i class="fa fa-shopping-cart" style="font-size:24px"> </i>
-                <span></span><span class="delete">delete all </span>
+                <span></span><span class="delete" onclick="deleteAll()" >delete all</span>
             </div>
-            <div class="item-list" id="item-list">
-
-            </div>
+            <div class="item-list" id="item-list"></div>
             <div class="total">
                 <span>TOTAL</span><span class="total-price">£4.00 </span>
             </div>
@@ -49,6 +47,7 @@
     const URL = "https://teachablemachine.withgoogle.com/models/I_g7Zkc37/";
 
     let model, webcam, labelContainer, maxPredictions;
+    let blankFlag = true;
     let prevPredictions = [];
     let basket = {};
 
@@ -79,7 +78,9 @@
         document.getElementById("webcam-container").appendChild(webcam.canvas);
         labelContainer = document.getElementById("label-container");
         for (let i = 0; i < maxPredictions; i++) { // and class labels
-            labelContainer.appendChild(document.createElement("div"));
+            buttonDiv = document.createElement("div");
+            buttonDiv.setAttribute("class", "fruit-btn-container");
+            labelContainer.appendChild(buttonDiv);
         }
     }
 
@@ -104,6 +105,8 @@
 
         let highest;
         prediction.forEach((value, key) => { (!highest || value.probability >= highest.probability) && (highest = value) });
+        
+
 
 
         if (prevPredictions.length > 50) {
@@ -111,22 +114,24 @@
 
 
             //TODO: two_most_frequent returns the number of occurences, as well as classnames
-            if (two_most_frequent.length == 1) {
+            if (two_most_frequent.length == 1 && blankFlag) {
                 addToBasket(two_most_frequent[0]);
+
             }
 
 
-            // two_most_frequent.forEach((prediction, index) => {
-            //     labelContainer.childNodes[index].innerHTML = `<button onclick=addToBasket(${prediction})>`+prediction+"</button>";
-            // });
 
-            labelContainer.childNodes[0].innerHTML = `<button onclick=addToBasket("${two_most_frequent[0]}")>` + two_most_frequent[0] + "</button>";
-            // console.log(two_most_frequent[1]);
+            labelContainer.childNodes[0].innerHTML = `<button class='fruit-btn' onclick='addToBasket("${two_most_frequent[0]}")'>` + two_most_frequent[0] + "</button>";
             if (two_most_frequent[1]) {
-                // labelContainer.childNodes[1].disabled = false;  
-                labelContainer.childNodes[1].innerHTML = `<button onclick=addToBasket("${two_most_frequent[1]}")>` + two_most_frequent[1] + "</button>";
+ 
+                labelContainer.childNodes[1].innerHTML = `<button class='fruit-btn' onclick='addToBasket("${two_most_frequent[1]}")'>` + two_most_frequent[1] + "</button>";
             } else {
                 labelContainer.childNodes[1].innerHTML = "";
+
+
+
+
+
                 // labelContainer.childNodes[1].disabled = true; 
             }
             // for (let i = 0; i < maxPredictions; i++) {
@@ -138,7 +143,10 @@
 
             // }
             prevPredictions = [];
-        } else {
+        } else if(highest.className == "Empty"){
+            blankFlag = true;
+            prevPredictions = [];
+        } else{
             prevPredictions.push(highest);
         }
 
@@ -225,14 +233,19 @@
         }
 
 
-        basketClasses = Object.keys(basket);
-        basketCounter = 1;
-        totalItemCount = 0;
+        let basketClasses = Object.keys(basket);
+        let basketCounter = 0;
+        let totalItemCount = 0;
+        let basketNode = document.getElementById("item-list");
         basketClasses.forEach((key, index) => {
 
-
-            document.getElementById("item-list").appendChild(document.createElement("p"));
-            document.getElementById("item-list").childNodes[basketCounter].innerHTML = key + ": " + basket[key];
+            basketNode.appendChild(document.createElement("div"));
+            basketItem = basketNode.childNodes[basketCounter];
+            basketItem.appendChild(document.createElement("p"));
+            basketItem.childNodes[0].innerHTML = key + ": " + basket[key];
+            basketItem.appendChild(document.createElement("i"));
+            basketItem.childNodes[1].setAttribute("class","fa fa-minus-circle decrement");
+            basketItem.childNodes[1].setAttribute("onclick",`decrement("${key}")`)
             totalItemCount += basket[key];
 
 
@@ -245,6 +258,7 @@
         });
         document.getElementById("shopping-cart").childNodes[1].innerHTML = "  " + totalItemCount + " items";
         console.log(Object.keys(basket).length);
+        blankFlag = false;
 
 
 
@@ -266,5 +280,48 @@
 
 
     // }
+    function deleteAll(){
+        basket = {};
+        parent = document.getElementById("item-list") 
+        parent.innerHTML = "";
+        // while(parent.firstChild){
+        //     parent.removeChild(parent.firstChild);
+        // }
+
+        document.getElementById("shopping-cart").childNodes[1].innerHTML = "";
+    }
+
+    function decrement(key){
+        if(basket[key] <= 1){
+            delete basket[key];
+        }else{
+            basket[key]--;
+        }
+
+        let basketClasses = Object.keys(basket);
+        let basketCounter = 0;
+        let totalItemCount = 0;
+        let basketNode = document.getElementById("item-list");
+        basketNode.innerHTML = "";
+        
+        basketClasses.forEach((key, index) => {
+
+
+            basketNode.appendChild(document.createElement("div"));
+            basketItem = basketNode.childNodes[basketCounter];
+            basketItem.appendChild(document.createElement("p"));
+            basketItem.childNodes[0].innerHTML = key + ": " + basket[key];
+            basketItem.appendChild(document.createElement("i"));
+            basketItem.childNodes[1].setAttribute("class","fa fa-minus-circle decrement");
+            basketItem.childNodes[1].setAttribute("onclick",`decrement("${key}")`)
+            totalItemCount += basket[key];
+            
+            basketCounter++;
+        });
+        document.getElementById("shopping-cart").childNodes[1].innerHTML = "  " + totalItemCount + " items";
+        console.log(Object.keys(basket).length);
+
+    }
+
     init()
 </script>
