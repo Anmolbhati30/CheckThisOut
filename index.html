@@ -3,6 +3,7 @@
 <button type="button" id="start-btn" onclick="init()">Start</button>
 <div id="webcam-container"></div>
 <div id="label-container"></div>
+<div id="basket-container"></div>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 <script type="text/javascript">
@@ -14,6 +15,7 @@
 
     let model, webcam, labelContainer, maxPredictions;
     let prevPredictions = [];
+    let basket = {};
 
     // Load the image model and setup the webcam
     var startTime;
@@ -27,7 +29,7 @@
         // or files from your local hard drive
         // Note: the pose library adds "tmImage" object to your window (window.tmImage)
         model = await tmImage.load(modelURL, metadataURL);
-        maxPredictions = 3;
+        maxPredictions = 2;
         
 
         // Convenience function to setup a webcam
@@ -71,10 +73,28 @@
 
         if(prevPredictions.length > 50){
             var two_most_frequent = calcMode();
+            console.log("first: " + two_most_frequent[0] + " second: " + two_most_frequent[1]);
+
+            //TODO: two_most_frequent returns the number of occurences, as well as classnames
+            if(two_most_frequent.length == 1){
+                addToBasket(two_most_frequent[0]);
+            }
+            
+            
+            // two_most_frequent.forEach((prediction, index) => {
+            //     labelContainer.childNodes[index].innerHTML = `<button onclick=addToBasket(${prediction})>`+prediction+"</button>";
+            // });
+
             console.log("Should output:  "+ two_most_frequent[0]);
-            labelContainer.childNodes[0].innerHTML = two_most_frequent[0];
+            labelContainer.childNodes[0].innerHTML = `<button onclick=addToBasket('${two_most_frequent[0]}')>`+two_most_frequent[0]+"</button>";
             console.log(two_most_frequent[1]);
-            labelContainer.childNodes[1].innerHTML =  (two_most_frequent[1] ? two_most_frequent[1] : "");
+            if(two_most_frequent[1]) {
+                // labelContainer.childNodes[1].disabled = false;  
+                labelContainer.childNodes[1].innerHTML =  `<button onclick=addToBasket('${two_most_frequent[1]}')>`+two_most_frequent[1]+"</button>";
+            } else {
+                labelContainer.childNodes[1].innerHTML = "";
+                // labelContainer.childNodes[1].disabled = true; 
+            }
             // for (let i = 0; i < maxPredictions; i++) {
             //     if(prevPredictions[i]){
             //         var classPrediction =
@@ -108,7 +128,18 @@
         var secondMaxCount = 0;
         var secondMaxEl;
         for(i in prevPredictions){
-            console.log(i)
+            // sort the prediction
+            // get the top 2
+            // if top confidence is 1, ignore the other
+            // add predictions to array of objects
+                // object will be name and array of predictions
+            
+            // no. 1 pred is mode 
+            // no .2 pred is 2nd
+
+
+
+
             currentClass = prevPredictions[i].className;
             // if(currentClass == "Empty"){
             //     continue;
@@ -121,7 +152,7 @@
             }
             
             maxEl && (maxCount = modeHash[maxEl]);
-            maxEl && (secondMaxCount = modeHash[secondMaxEl]);
+            secondMaxEl && (secondMaxCount = modeHash[secondMaxEl]);
 
             if(modeHash[currentClass] > maxCount){
                 secondMaxEl = maxEl;
@@ -132,7 +163,7 @@
                 console.log("max: " + maxEl);
                 
             }else if(modeHash[currentClass] > secondMaxCount && currentClass != maxEl){
-                if((secondMaxCount == 0 && maxCount < i*0.98) || secondMaxCount > 0 ||true){
+                if((secondMaxCount == 0 && maxCount < i*0.98) || secondMaxCount > 0){
                     secondMaxCount = modeHash[currentClass];
                     secondMaxEl = currentClass;
                 }
@@ -142,8 +173,57 @@
             console.log("second max: " + secondMaxEl);
 
         }
-
-        return [maxEl, secondMaxEl];
+        if(secondMaxEl != undefined){
+            if(maxEl < secondMaxEl){
+                return [maxEl, secondMaxEl];
+            } else {
+                return [secondMaxEl, maxEl];
+            }
+        } else {
+            return [maxEl];
+        }
     }
+
+    function addToBasket(item){
+        if(basket[item]){
+            basket[item]++;
+        }else{
+            basket[item] = 1;
+        }
+        console.log(basket)
+        
+        basketClasses = Object.keys(basket);
+        basketCounter = 0;
+        basketClasses.forEach((key,index)=>{
+
+            document.getElementById("basket-container").appendChild(document.createElement("p"));
+            document.getElementById("basket-container").childNodes[basketCounter].innerHTML = key + ": " +basket[key];
+            
+            // let button = document.createElement("button");
+            // button.setAttribute("onclick", `decrementBasketItem('${key}')`);
+            // button.innerHTML = key;
+            // document.getElementById("basket-container").appendChild(button);
+            basketCounter++;
+        });
+
+
+    }
+
+    // function decrementBasketItem(name){
+    //     if(basket[name] == 1){
+    //         delete basket[name];
+    //         console.log("removed", basket[name]);
+    //     }else{
+    //         basket[name]-= 1;
+
+
+    //     };
+    //     renderBasket();
+    // }
+
+    // function renderBasket(){
+
+
+    // }
 </script>
 </body>
