@@ -106,6 +106,7 @@
         prediction.forEach((value, key) => { (!highest || value.probability >= highest.probability) && (highest = value) });
 
 
+
         if (prevPredictions.length > 50) {
             var two_most_frequent = calcMode();
 
@@ -139,7 +140,9 @@
 
             // }
             prevPredictions = [];
-        } else {
+        } else if(highest.className == "Empty"){
+            prevPredictions = [];
+        } else{
             prevPredictions.push(highest);
         }
 
