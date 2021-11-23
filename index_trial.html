@@ -47,6 +47,7 @@
     const URL = "https://teachablemachine.withgoogle.com/models/I_g7Zkc37/";
 
     let model, webcam, labelContainer, maxPredictions;
+    let blankFlag = true;
     let prevPredictions = [];
     let basket = {};
 
@@ -104,6 +105,7 @@
 
         let highest;
         prediction.forEach((value, key) => { (!highest || value.probability >= highest.probability) && (highest = value) });
+        
 
 
 
@@ -112,8 +114,9 @@
 
 
             //TODO: two_most_frequent returns the number of occurences, as well as classnames
-            if (two_most_frequent.length == 1) {
+            if (two_most_frequent.length == 1 && blankFlag) {
                 addToBasket(two_most_frequent[0]);
+
             }
 
 
@@ -141,6 +144,7 @@
             // }
             prevPredictions = [];
         } else if(highest.className == "Empty"){
+            blankFlag = true;
             prevPredictions = [];
         } else{
             prevPredictions.push(highest);
@@ -249,6 +253,7 @@
         });
         document.getElementById("shopping-cart").childNodes[1].innerHTML = "  " + totalItemCount + " items";
         console.log(Object.keys(basket).length);
+        blankFlag = false;
 
 
 
