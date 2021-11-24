@@ -25,9 +25,9 @@
             </div>
             <div class="item-list" id="item-list"></div>
             <div class="total">
-                <span>TOTAL</span><span id="total-price" class="total-price"></span>
+                <span>TOTAL</span><span id="total-price" class="total-price">£0.00</span>
             </div>
-            <form action="/Users/p/Makers/Projects/week11/CheckThisOut/payment_page.html" method="get">
+            <form id="cto-form" action="/Users/p/Makers/Projects/week11/CheckThisOut/payment_page.html" method="get">
                 <button class="cto-button" type="submit">CheckThisOut</button>
             </form>
         </div>
@@ -41,6 +41,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 <script type="text/javascript">
+    var loc = window.location.pathname;
+    var dir = loc.substring(0, loc.lastIndexOf('/'));
+    document.getElementById("cto-form").action = dir + "/payment_page.html";
     // More API functions here:
     // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
 
@@ -58,7 +61,6 @@
     // Load the image model and setup the webcam
     var startTime;
     async function init() {
-        alert(process.env.PWD);
         const modelURL = URL + "model.json";
         const metadataURL = URL + "metadata.json";
         startTime = new Date().getTime();
