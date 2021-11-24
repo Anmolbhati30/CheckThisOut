@@ -27,8 +27,9 @@
             <div class="total">
                 <span>TOTAL</span><span id="total-price" class="total-price">£0.00</span>
             </div>
-            <form id="cto-form" action="/Users/p/Makers/Projects/week11/CheckThisOut/payment_page.html" method="get">
-                <button class="cto-button" type="submit">CheckThisOut</button>
+            <form id="cto-form" action="/Users/p/Makers/Projects/week11/CheckThisOut/payment_page.html" method="post">
+                <input id="cto-basket" type="hidden" name="basket" value="hello">
+                <button class="cto-button" onclick="submitCheckout(); return false;">CheckThisOut</button>
             </form>
         </div>
     </div>
@@ -338,6 +339,11 @@
         document.getElementById("total-count").innerHTML = "  " + totalItemCount + " items";
         console.log(Object.keys(basket).length);
 
+    }
+
+    function submitCheckout(){
+        sessionStorage.setItem("basket", JSON.stringify(basket))
+        document.getElementById("cto-form").submit();
     }
 
     init()
