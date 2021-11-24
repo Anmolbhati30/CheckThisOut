@@ -27,12 +27,13 @@ p{
 
 
 .fruit-btn{
-    background-color:#da63df;
+    background-color:#DB8C23;
     border:none;
     padding:0.7rem 1rem;
     margin:0.5rem;
     color:white;
     display:inline-block;
+    font-size:18px;
 }
 
 .left {
