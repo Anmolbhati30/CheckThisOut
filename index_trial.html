@@ -19,15 +19,15 @@
         </div>
         <div class="right">
             <div class="item-amount" id="shopping-cart">
-                
+
                 <span><i class="fa fa-shopping-cart" style="font-size:24px"></i></span>
-                <span id="total-count"></span><span class="delete" onclick="deleteAll()" >delete all</span>
+                <span id="total-count"></span><span class="delete" onclick="deleteAll()">delete all</span>
             </div>
             <div class="item-list" id="item-list"></div>
             <div class="total">
                 <span>TOTAL</span><span id="total-price" class="total-price">£0.00</span>
             </div>
-            <form id="cto-form" action="/Users/p/Makers/Projects/week11/CheckThisOut/payment_page.html" method="post">
+            <form id="cto-form" action="payment_page.html" method="post">
                 <input id="cto-basket" type="hidden" name="basket" value="hello">
                 <button class="cto-button" onclick="submitCheckout(); return false;">CheckThisOut</button>
             </form>
@@ -50,9 +50,25 @@
 
     // the link to your model provided by Teachable Machine export panel
     const URL = "https://teachablemachine.withgoogle.com/models/I_g7Zkc37/";
-    const prices = { "Red Pepper": 0.42,"Orange": 0.30, "Courgette": 0.50, "Red Apple": 0.30, "Sweet Potato": 0.60, "Celery": 0.43,
-    "Banana": 0.14, "Broccoli": 0.80,"Pineapple": 1.50, "Savoy Cabbage": 0.43, "Avocado": 0.75,
-    "Red Onion": 0.28, "Ginger": 0.70, "Butternut Squash": 0.90, "Red Cabbage": 0.50, "Grapefruit": 0.50, "Clementine": 0.17 }
+    const prices = {
+        "Red Pepper": 0.42,
+        "Orange": 0.30,
+        "Courgette": 0.50,
+        "Red Apple": 0.30,
+        "Sweet Potato": 0.60,
+        "Celery": 0.43,
+        "Banana": 0.14,
+        "Broccoli": 0.80,
+        "Pineapple": 1.50,
+        "Savoy Cabbage": 0.43,
+        "Avocado": 0.75,
+        "Red Onion": 0.28,
+        "Ginger": 0.70,
+        "Butternut Squash": 0.90,
+        "Red Cabbage": 0.50,
+        "Grapefruit": 0.50,
+        "Clementine": 0.17
+    }
 
     let model, webcam, labelContainer, maxPredictions;
     let blankFlag = true;
@@ -113,8 +129,10 @@
         // const filteredPrediction = prediction.filter((element) => element.probability > 0.25);
 
         let highest;
-        prediction.forEach((value, key) => { (!highest || value.probability >= highest.probability) && (highest = value) });
-        
+        prediction.forEach((value, key) => {
+            (!highest || value.probability >= highest.probability) && (highest = value)
+        });
+
 
 
 
@@ -132,7 +150,7 @@
 
             labelContainer.childNodes[0].innerHTML = `<button class='fruit-btn' onclick='addToBasket("${two_most_frequent[0]}")'>` + two_most_frequent[0] + "</button>";
             if (two_most_frequent[1]) {
- 
+
                 labelContainer.childNodes[1].innerHTML = `<button class='fruit-btn' onclick='addToBasket("${two_most_frequent[1]}")'>` + two_most_frequent[1] + "</button>";
             } else {
                 labelContainer.childNodes[1].innerHTML = "";
@@ -152,10 +170,10 @@
 
             // }
             prevPredictions = [];
-        } else if(highest.className == "Empty"){
+        } else if (highest.className == "Empty") {
             blankFlag = true;
             prevPredictions = [];
-        } else{
+        } else {
             prevPredictions.push(highest);
         }
 
@@ -254,8 +272,8 @@
             basketItem.appendChild(document.createElement("p"));
             basketItem.childNodes[0].innerHTML = key + ": " + basket[key];
             basketItem.appendChild(document.createElement("i"));
-            basketItem.childNodes[1].setAttribute("class","fa fa-minus-circle decrement");
-            basketItem.childNodes[1].setAttribute("onclick",`decrement("${key}")`)
+            basketItem.childNodes[1].setAttribute("class", "fa fa-minus-circle decrement");
+            basketItem.childNodes[1].setAttribute("onclick", `decrement("${key}")`)
 
             totalPrice += prices[key] * basket[key];
             totalItemCount += basket[key];
@@ -294,9 +312,9 @@
 
 
     // }
-    function deleteAll(){
+    function deleteAll() {
         basket = {};
-        parent = document.getElementById("item-list") 
+        parent = document.getElementById("item-list")
         parent.innerHTML = "";
         // while(parent.firstChild){
         //     parent.removeChild(parent.firstChild);
@@ -306,10 +324,10 @@
         document.getElementById("total-price").innerHTML = "£0.00";
     }
 
-    function decrement(key){
-        if(basket[key] <= 1){
+    function decrement(key) {
+        if (basket[key] <= 1) {
             delete basket[key];
-        }else{
+        } else {
             basket[key]--;
         }
 
@@ -319,7 +337,7 @@
         let basketNode = document.getElementById("item-list");
         let totalPrice = 0;
         basketNode.innerHTML = "";
-        
+
         basketClasses.forEach((key, index) => {
 
 
@@ -328,20 +346,20 @@
             basketItem.appendChild(document.createElement("p"));
             basketItem.childNodes[0].innerHTML = key + ": " + basket[key];
             basketItem.appendChild(document.createElement("i"));
-            basketItem.childNodes[1].setAttribute("class","fa fa-minus-circle decrement");
-            basketItem.childNodes[1].setAttribute("onclick",`decrement("${key}")`)
+            basketItem.childNodes[1].setAttribute("class", "fa fa-minus-circle decrement");
+            basketItem.childNodes[1].setAttribute("onclick", `decrement("${key}")`)
             totalItemCount += basket[key];
 
-            totalPrice += prices[key] * basket[key]; 
+            totalPrice += prices[key] * basket[key];
             basketCounter++;
         });
-        document.getElementById("total-price").innerHTML = "£ "+totalPrice.toFixed(2);
+        document.getElementById("total-price").innerHTML = "£ " + totalPrice.toFixed(2);
         document.getElementById("total-count").innerHTML = "  " + totalItemCount + " items";
         console.log(Object.keys(basket).length);
 
     }
 
-    function submitCheckout(){
+    function submitCheckout() {
         sessionStorage.setItem("basket", JSON.stringify(basket))
         document.getElementById("cto-form").submit();
     }

@@ -12,59 +12,76 @@
     <div style="width: 100%;overflow:auto;" ;>
         <div class="left">
             <p class="payment-text">How would you like to pay?</p>
-            <form action="/Users/p/Makers/Projects/week11/CheckThisOut/final_page.html" method="get">
-                <button class="start-button" type="submit">CASH</button>
-                <button class="start-button" type="submit">CARD</button>
+            <form id="payment-form" action="" method="get ">
+                <button class="start-button " type="submit ">CASH</button>
+                <button class="start-button " type="submit ">CARD</button>
             </form>
         </div>
-        <div class="right">
-            <div class="item-amount">
-                <i class="fa fa-shopping-cart" style="font-size:24px"> </i>
-                <span id="total-count">0 items</span><span class="delete">delete all </span>
+        <div class="right ">
+            <div class="item-amount ">
+                <i class="fa fa-shopping-cart " style="font-size:24px "> </i>
+                <span id="total-count ">0 items</span><span class="delete ">delete all </span>
             </div>
-            <div class="item-list" id="item-list"></div>
-            <div class="total">
-                <span>TOTAL</span><span id="total-price" class="total-price">£0.00</span>
+            <div class="item-list " id="item-list "></div>
+            <div class="total ">
+                <span>TOTAL</span><span id="total-price " class="total-price ">£0.00</span>
             </div>
-            <!-- <button class="cto-button" type="button">CheckTheseOut</button> -->
+            <!-- <button class="cto-button " type="button ">CheckTheseOut</button> -->
         </div>
     </div>
-                    <!-- <p>Potato x 2 <span class="price">£0.50
-                        <i class="fa fa-minus-circle"></i></span>
+    <!-- <p>Potato x 2 <span class="price ">£0.50
+                        <i class="fa fa-minus-circle "></i></span>
                 </p>
-                <p> Apple x 1 <span class="price">£1.00
-                        <i class="fa fa-minus-circle"></i></span>
+                <p> Apple x 1 <span class="price ">£1.00
+                        <i class="fa fa-minus-circle "></i></span>
                 </p>
-                <p>Orange x 1 <span class="price">£2.00
-                        <i class="fa fa-minus-circle"></i></span></p> -->
-                <!-- <div> <span class="bottom">TOTAL</span><span class="total-price"> £4.00</span></div> -->
-    <div style="clear:both"></div>
+                <p>Orange x 1 <span class="price ">£2.00
+                        <i class="fa fa-minus-circle "></i></span></p> -->
+    <!-- <div> <span class="bottom ">TOTAL</span><span class="total-price "> £4.00</span></div> -->
+    <div style="clear:both "></div>
     <script>
-        console.log(sessionStorage.getItem("basket"));
-        const prices = { "Red Pepper": 0.42,"Orange": 0.30, "Courgette": 0.50, "Red Apple": 0.30, "Sweet Potato": 0.60, "Celery": 0.43,
-    "Banana": 0.14, "Broccoli": 0.80,"Pineapple": 1.50, "Savoy Cabbage": 0.43, "Avocado": 0.75,
-    "Red Onion": 0.28, "Ginger": 0.70, "Butternut Squash": 0.90, "Red Cabbage": 0.50, "Grapefruit": 0.50, "Clementine": 0.17 }
-        
-        let basketJSON = sessionStorage.getItem("basket");
+        var loc = window.location.pathname;
+        var dir = loc.substring(0, loc.lastIndexOf('/'));
+        document.getElementById("payment-form").action = dir + "/final_page.html";
+        const prices = {
+            "Red Pepper ": 0.42,
+            "Orange ": 0.30,
+            "Courgette ": 0.50,
+            "Red Apple ": 0.30,
+            "Sweet Potato ": 0.60,
+            "Celery ": 0.43,
+            "Banana ": 0.14,
+            "Broccoli ": 0.80,
+            "Pineapple ": 1.50,
+            "Savoy Cabbage ": 0.43,
+            "Avocado ": 0.75,
+            "Red Onion ": 0.28,
+            "Ginger ": 0.70,
+            "Butternut Squash ": 0.90,
+            "Red Cabbage ": 0.50,
+            "Grapefruit ": 0.50,
+            "Clementine ": 0.17
+        }
+
+        let basketJSON = sessionStorage.getItem("basket ");
         let basket = JSON.parse(basketJSON);
 
 
-        function showBasket(){
+        function showBasket() {
             let basketClasses = Object.keys(basket);
-            alert(basketClasses);
             let basketCounter = 0;
             let totalItemCount = 0;
-            let basketNode = document.getElementById("item-list");
+            let basketNode = document.getElementById("item-list ");
             let totalPrice = 0;
             basketClasses.forEach((key, index) => {
 
-                basketNode.appendChild(document.createElement("div"));
+                basketNode.appendChild(document.createElement("div "));
                 basketItem = basketNode.childNodes[basketCounter];
-                basketItem.appendChild(document.createElement("p"));
+                basketItem.appendChild(document.createElement("p "));
                 basketItem.childNodes[0].innerHTML = key + ": " + basket[key];
-                // basketItem.appendChild(document.createElement("i"));
-                // basketItem.childNodes[1].setAttribute("class","fa fa-minus-circle decrement");
-                // basketItem.childNodes[1].setAttribute("onclick",`decrement("${key}")`)
+                // basketItem.appendChild(document.createElement("i "));
+                // basketItem.childNodes[1].setAttribute("class ","fa fa-minus-circle decrement ");
+                // basketItem.childNodes[1].setAttribute("onclick ",`decrement("${key} ")`)
 
                 totalPrice += prices[key] * basket[key];
                 totalItemCount += basket[key];
@@ -73,8 +90,8 @@
                 basketCounter++;
             });
 
-            document.getElementById("total-price").innerHTML = "£" +totalPrice.toFixed(2);
-            document.getElementById("total-count").innerHTML = totalItemCount;
+            document.getElementById("total-price ").innerHTML = "£ " + totalPrice.toFixed(2);
+            document.getElementById("total-count ").innerHTML = totalItemCount;
         }
         showBasket();
     </script>
